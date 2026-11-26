@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给老爸的小卡片</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+  :root{
+    --bg1:#f2f7fc; --bg2:#dceaf6; --main:#2f6fb0; --main-soft:#9ec6e6;
+    --text:#1f3f5c; --card:#ffffff; --line:#d3e4f2; --shadow:0 12px 32px rgba(47,111,176,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--text);min-height:100vh;line-height:1.7;overflow-x:hidden;
+  }
+  .serif{font-family:"Noto Serif SC",serif}
+  button{font-family:inherit;cursor:pointer;border:none}
+
+  /* ===== 背景：一家人温馨动画层 ===== */
+  .family-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .sky-glow{position:absolute;left:50%;top:12%;width:70vw;height:70vw;max-width:560px;max-height:560px;
+    transform:translateX(-50%);background:radial-gradient(circle,rgba(255,255,255,.55),rgba(158,198,230,0) 70%);border-radius:50%}
+  .cloud{position:absolute;font-size:34px;opacity:.6;animation:drift linear infinite}
+  @keyframes drift{0%{transform:translateX(-15vw)}100%{transform:translateX(115vw)}}
+  .ground{position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(180deg,rgba(158,198,230,0),rgba(158,198,230,.35))}
+
+  /* ===== 飘落装饰层 ===== */
+  .float-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+  .float-emoji{position:absolute;top:-8%;font-size:22px;animation:fall linear infinite;opacity:.85}
+  @keyframes fall{0%{transform:translateY(0) rotate(0deg)}100%{transform:translateY(112vh) rotate(360deg)}}
+
+  .stage{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:38px 18px 130px;overflow:hidden}
+  .hero{position:relative;z-index:2;text-align:center;padding:26px 10px 10px}
+  .hero .tag{display:inline-block;font-size:13px;letter-spacing:3px;color:var(--main);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 18px;margin-bottom:20px}
+  .hero h2{font-size:32px;font-weight:900;line-height:1.4}
+  .hero .bless{margin-top:16px;font-size:20px;font-weight:600;opacity:.9}
+  .hero .motto{margin-top:14px;font-size:15px;opacity:.7}
+  .hero .scene{margin-top:18px;font-size:30px;letter-spacing:10px}
+  .big-heart{text-align:center;font-size:40px;margin-top:10px;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+  .grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:16px;margin-top:30px}
+  @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+  .card h3{font-size:14px;color:var(--main);margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:7px}
+  .card p{font-size:15px}
+  .card.full{grid-column:1 / -1}
+  .chips-inline{display:flex;flex-wrap:wrap;gap:8px}
+  .chips-inline span{background:var(--bg2);color:var(--text);border-radius:10px;padding:6px 12px;font-size:13px}
+  .sign{text-align:center;margin-top:34px;font-size:14px;opacity:.7;position:relative;z-index:2}
+
+  .family-scene{position:relative;z-index:2;margin-top:26px;display:flex;justify-content:center;align-items:flex-end;gap:12px;font-size:38px;opacity:.95}
+  .family-scene .folk{display:inline-block;animation:sway 3.6s ease-in-out infinite}
+  .family-scene .folk:nth-child(2){animation-delay:.4s}
+  .family-scene .folk:nth-child(3){animation-delay:.8s}
+  .family-scene .folk:nth-child(4){animation-delay:.2s}
+  .family-scene .folk:nth-child(5){animation-delay:.6s}
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+
+  /* ===== 小狗宠物 ===== */
+  .pet{position:fixed;left:6%;bottom:86px;z-index:3;font-size:46px;cursor:pointer;
+    animation:petwalk 9s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(47,111,176,.25))}
+  @keyframes petwalk{
+    0%{transform:translateX(0) translateY(0) scaleX(1)}
+    25%{transform:translateX(26vw) translateY(-8px) scaleX(1)}
+    50%{transform:translateX(52vw) translateY(0) scaleX(1)}
+    51%{transform:translateX(52vw) scaleX(-1)}
+    75%{transform:translateX(26vw) translateY(-8px) scaleX(-1)}
+    100%{transform:translateX(0) scaleX(-1)}
+  }
+  .pet .pet-bubble{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:18px;white-space:nowrap;opacity:0}
+  .pet.poke .pet-bubble{animation:bubble 1.4s ease-out}
+  @keyframes bubble{0%{opacity:0;transform:translate(-50%,6px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-18px)}}
+
+  .float-btn{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:10px}
+  .float-btn .btn{padding:12px 20px;font-size:14px;background:var(--card);color:var(--main);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px}
+  .burst{position:fixed;pointer-events:none;font-size:26px;z-index:6;animation:burst .9s ease-out forwards}
+  @keyframes burst{0%{transform:translate(0,0) scale(.6);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.3);opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="family-layer" id="familyLayer">
+  <div class="sky-glow"></div>
+  <div class="ground"></div>
+</div>
+
+<div class="float-layer" id="floatLayer"></div>
+
+<div class="stage">
+  <div class="hero">
+    <span class="tag">日常小惊喜</span>
+    <h2 class="serif">亲爱的老爸，开心每一天</h2>
+    <div class="bless serif">老爸，辛苦了</div>
+    <div class="motto">—— 话不多，却一直为我遮风挡雨</div>
+    <div class="scene">🌙 🏡 🍵</div>
+    <div class="big-heart">🐶</div>
+  </div>
+
+  <div class="grid" id="cardGrid"></div>
+
+  <div class="sign">—— 爱你的小猪宝　2026 年冬</div>
+
+  <div class="family-scene">
+    <span class="folk">🏠</span>
+    <span class="folk">🌳</span>
+    <span class="folk">👨</span>
+    <span class="folk">👩</span>
+    <span class="folk">👧</span>
+    <span class="folk">🌳</span>
+  </div>
+</div>
+
+<!-- 小狗宠物 -->
+<div class="pet" id="pet" title="点我一下">🐶<span class="pet-bubble">🐶 汪汪～ 💗</span></div>
+
+<div class="float-btn">
+  <button class="btn" id="musicBtn">🔇 配乐：关</button>
+  <button class="btn" id="replayBtn">再飘一次 ☁️</button>
+</div>
+
+<script>
+/* ===== 已写死的定制内容 ===== */
+const DECOR = ["☁️","❤️","⭐","🌙","🍵","🐾"];
+
+const cards = [
+  { icon:"💌", title:"心里话", text:"有你在，我就什么都不怕。", full:true },
+  { icon:"🙏", title:"想谢谢你做的事", text:"谢谢你撑起这个家，默默把最好的都留给我。" },
+  { icon:"✨", title:"最打动我的优点", text:"话不多，却把爱都藏在行动里。" },
+  { icon:"🤝", title:"我对你的承诺", text:"以后换我来照顾你，多陪你说说话。" },
+  { icon:"🍵", title:"你最爱喝的味道", text:"一壶热茶" },
+  { icon:"💬", title:"你最想听我说的一句", text:"老爸你真棒" },
+  { icon:"📣", title:"你常念叨的话", text:"好好照顾自己" },
+  { icon:"🌿", title:"你的爱好", hobby:["喝茶","散步"] },
+  { icon:"🍃", title:"最爱的茶", text:"热茶 🍵" },
+];
+
+function renderCards(){
+  const grid = document.getElementById("cardGrid");
+  grid.innerHTML = cards.map(c=>{
+    let body = c.hobby
+      ? `<div class="chips-inline">${c.hobby.map(h=>`<span>${h}</span>`).join("")}</div>`
+      : `<p>${c.text}</p>`;
+    return `<div class="card${c.full?" full":""}"><h3>${c.icon} ${c.title}</h3>${body}</div>`;
+  }).join("");
+}
+
+/* ===== 背景：飘动的云朵 ===== */
+function startClouds(){
+  const layer = document.getElementById("familyLayer");
+  const clouds = ["☁️","☁️","⛅"];
+  for(let i=0;i<3;i++){
+    const c=document.createElement("div");
+    c.className="cloud";
+    c.textContent=clouds[i%clouds.length];
+    c.style.top=(8+i*10)+"%";
+    c.style.fontSize=(28+Math.random()*16)+"px";
+    c.style.animationDuration=(28+Math.random()*18)+"s";
+    c.style.animationDelay=(-Math.random()*20)+"s";
+    layer.appendChild(c);
+  }
+}
+
+/* ===== 飘落装饰 ===== */
+function startFloats(){
+  const layer = document.getElementById("floatLayer");
+  layer.innerHTML = "";
+  for(let i=0;i<18;i++){
+    const e=document.createElement("div");
+    e.className="float-emoji";
+    e.textContent=DECOR[i%DECOR.length];
+    e.style.left=Math.random()*100+"%";
+    e.style.fontSize=(16+Math.random()*16)+"px";
+    e.style.animationDuration=(7+Math.random()*7)+"s";
+    e.style.animationDelay=(-Math.random()*8)+"s";
+    layer.appendChild(e);
+  }
+}
+
+/* ===== 舒缓配乐：Web Audio 合成，无需外部音频 ===== */
+const Music = {
+  ctx:null, master:null, timer:null, chordIdx:0, playing:false,
+  chords:[
+    [261.63,329.63,392.00],
+    [220.00,261.63,329.63],
+    [174.61,220.00,261.63],
+    [196.00,246.94,293.66]
+  ],
+  ensureCtx(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext||window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.16;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state==="suspended") this.ctx.resume();
+  },
+  playChord(freqs){
+    const t0=this.ctx.currentTime;
+    freqs.forEach((f,i)=>{
+      const osc=this.ctx.createOscillator();
+      const g=this.ctx.createGain();
+      osc.type="triangle";
+      osc.frequency.value=f;
+      const start=t0+i*0.35;
+      g.gain.setValueAtTime(0.0001,start);
+      g.gain.exponentialRampToValueAtTime(0.5,start+0.9);
+      g.gain.exponentialRampToValueAtTime(0.0001,start+3.8);
+      osc.connect(g); g.connect(this.master);
+      osc.start(start); osc.stop(start+4.0);
+    });
+  },
+  scheduleNext(){
+    this.playChord(this.chords[this.chordIdx%this.chords.length]);
+    this.chordIdx++;
+  },
+  start(){
+    this.ensureCtx();
+    if(this.playing) return;
+    this.playing=true;
+    this.scheduleNext();
+    this.timer=setInterval(()=>this.scheduleNext(),4200);
+  },
+  stop(){
+    this.playing=false;
+    if(this.timer){clearInterval(this.timer);this.timer=null;}
+    if(this.master) this.master.gain.setTargetAtTime(0.0001,this.ctx.currentTime,0.3);
+  },
+  peep(){
+    this.ensureCtx();
+    const t=this.ctx.currentTime;
+    [523.25,659.25].forEach((f,i)=>{
+      const osc=this.ctx.createOscillator(),g=this.ctx.createGain();
+      osc.type="sine"; osc.frequency.value=f;
+      const s=t+i*0.12;
+      g.gain.setValueAtTime(0.0001,s);
+      g.gain.exponentialRampToValueAtTime(0.3,s+0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001,s+0.35);
+      osc.connect(g); g.connect(this.master||this.ctx.destination);
+      osc.start(s); osc.stop(s+0.4);
+    });
+  }
+};
+
+const musicBtn=document.getElementById("musicBtn");
+musicBtn.addEventListener("click",()=>{
+  if(Music.playing){ Music.stop(); musicBtn.textContent="🔇 配乐：关"; }
+  else{ Music.start(); musicBtn.textContent="🔊 配乐：开"; }
+});
+
+/* ===== 小狗互动 ===== */
+const pet=document.getElementById("pet");
+pet.addEventListener("click",(ev)=>{
+  ev.stopPropagation();
+  Music.peep();
+  pet.classList.remove("poke"); void pet.offsetWidth; pet.classList.add("poke");
+  for(let i=0;i<5;i++){
+    const b=document.createElement("div");
+    b.className="burst"; b.textContent="❤️";
+    b.style.left=ev.clientX+"px"; b.style.top=ev.clientY+"px";
+    const ang=Math.random()*Math.PI*2, dist=30+Math.random()*40;
+    b.style.setProperty("--dx",Math.cos(ang)*dist+"px");
+    b.style.setProperty("--dy",Math.sin(ang)*dist+"px");
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),900);
+  }
+});
+
+/* ===== 点击撒花 ===== */
+document.addEventListener("click",(ev)=>{
+  if(ev.target.closest(".float-btn")||ev.target.closest(".pet")) return;
+  for(let i=0;i<6;i++){
+    const b=document.createElement("div");
+    b.className="burst";
+    b.textContent=DECOR[i%DECOR.length];
+    b.style.left=ev.clientX+"px"; b.style.top=ev.clientY+"px";
+    const ang=Math.random()*Math.PI*2, dist=40+Math.random()*50;
+    b.style.setProperty("--dx",Math.cos(ang)*dist+"px");
+    b.style.setProperty("--dy",Math.sin(ang)*dist+"px");
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),900);
+  }
+});
+document.getElementById("replayBtn").addEventListener("click",startFloats);
+
+renderCards();
+startClouds();
+startFloats();
+</script>
+</body>
+</html>
